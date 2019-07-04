@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45e26ef16d661c4e84fd6d3564174c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ParentGuardScript: {fileID: 1991448187}
 --- !u!68 &111409942
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -365,7 +366,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 441988779}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.25, y: 2.13, z: 0}
+  m_LocalPosition: {x: 1.5, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1839551166}
@@ -402,7 +403,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.1, y: 0.14}
+    oldSize: {x: 0.625, y: 0.875}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -759,7 +760,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 670475491}
   m_Enabled: 1
-  m_CellSize: {x: 0.25, y: 0.25, z: 0}
+  m_CellSize: {x: 1, y: 1, z: 0}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
@@ -1620,6 +1621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   startWaitTime: 1
+  isChaseActive: 0
   moveSpots:
   - {fileID: 1002934008}
   - {fileID: 1184631473}
@@ -1629,6 +1631,8 @@ MonoBehaviour:
   - {fileID: 1863548916}
   - {fileID: 1437939646}
   - {fileID: 1730291142}
+  lastKnownPos: {fileID: 0}
+  PlayerPos: {fileID: 441988781}
 --- !u!61 &1991448188
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1690,7 +1694,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -935927613
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: dd49fce4e626346499fd6cda0c2c2bad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

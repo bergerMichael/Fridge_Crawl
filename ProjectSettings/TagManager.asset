@@ -14,8 +14,8 @@ TagManager:
   - 
   - 
   - Background
-  - 
-  - 
+  - Floor
+  - Wall
   - 
   - 
   - 
@@ -44,8 +44,11 @@ TagManager:
   - name: FOV_Layer
     uniqueID: 2440311483
     locked: 0
-  - name: Tile_Layer
+  - name: Floor_Layer
     uniqueID: 115216467
+    locked: 0
+  - name: Wall_Layer
+    uniqueID: 916715371
     locked: 0
   - name: Enemy_Layer
     uniqueID: 3359039683
