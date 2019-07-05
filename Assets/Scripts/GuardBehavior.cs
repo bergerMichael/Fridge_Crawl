@@ -42,8 +42,16 @@ public class GuardBehavior : MonoBehaviour
 
     void RotateFOV()
     {
-        Vector2 direction = moveSpots[nextSpot].position;
-        float angle = Mathf.Sin((transform.position.y - direction.y) / (transform.position.x - direction.x)) * Mathf.Rad2Deg;
+        Transform direction;
+        if (isChaseActive)
+        {
+            direction = PlayerPos;
+        }
+        else
+        {
+            direction = moveSpots[nextSpot];            
+        }
+        float angle = Mathf.Sin((transform.position.y - direction.position.y) / (transform.position.x - direction.position.x)) * Mathf.Rad2Deg;
         Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         Transform[] toRotate = this.GetComponentsInChildren<Transform>();
@@ -53,7 +61,7 @@ public class GuardBehavior : MonoBehaviour
             if (toRotate[i].name == "FOV")
             {
                 // toRotate[i].rotation = Quaternion.Slerp(toRotate[i].rotation, rotation, speed * Time.deltaTime);
-                var newRotation = Quaternion.LookRotation((toRotate[i].position - moveSpots[nextSpot].position), Vector3.forward);
+                var newRotation = Quaternion.LookRotation((toRotate[i].position - direction.position), Vector3.forward);
                 newRotation.x = 0.0f;
                 newRotation.y = 0.0f;
                 toRotate[i].rotation = Quaternion.Slerp(toRotate[i].rotation, newRotation, Time.deltaTime * 8);
