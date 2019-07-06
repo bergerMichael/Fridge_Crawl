@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - DetectionAnimController
   layers:
   - Default
   - TransparentFX
@@ -55,4 +56,7 @@ TagManager:
     locked: 0
   - name: Wall_Layer
     uniqueID: 916715371
+    locked: 0
+  - name: UI_Layer
+    uniqueID: 3955827505
     locked: 0

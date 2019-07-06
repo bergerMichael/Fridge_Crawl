@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.Animations;
 
 public class GuardBehavior : MonoBehaviour
 {
@@ -12,7 +13,9 @@ public class GuardBehavior : MonoBehaviour
     public Transform[] moveSpots;
     public Transform lastKnownPos;
     public Transform PlayerPos;
-    private int nextSpot; 
+    private int nextSpot;
+
+    public Animator detectedAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +23,7 @@ public class GuardBehavior : MonoBehaviour
         waitTime = startWaitTime;
         nextSpot = 0;   // assuming object starts at position index 0
         isChaseActive = false;
+        //detectedAnimator = GetComponentInChildren<Animator>();   // This ensures that the get call only happens once. Otherwise, it would be called every time the animation controller is updated
     }
 
     // Update is called once per frame
@@ -109,6 +113,11 @@ public class GuardBehavior : MonoBehaviour
     {
         isChaseActive = true;
         lastKnownPos = detectedPos;
+        UpdateDetectionAnimControllerParameter();
     }
 
+    private void UpdateDetectionAnimControllerParameter() // This function modifies parameters in the attached detected animation controller - "DetectionAnimController"
+    {
+        detectedAnimator.SetBool("IsDetected", isChaseActive);
+    }
 }
