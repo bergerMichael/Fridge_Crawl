@@ -7,6 +7,8 @@ public class PlayerScript : MonoBehaviour
     public Vector2 speed = new Vector2(50, 50);
     public float rollDist;
     private Vector3 rollTo;
+    public int rollCharges;
+    public int invSize;
 
     public Animator playerAnimator;
     private bool IsMoving;
@@ -18,7 +20,6 @@ public class PlayerScript : MonoBehaviour
     {
         IsRolling = false;      // This needs to be false initially because it will only be assigned false outside of update
         IsRollInitiated = false;
-        rollDist = 0.5f;
     }
 
     // Update is called once per frame
@@ -39,9 +40,9 @@ public class PlayerScript : MonoBehaviour
             if (xDir == 0 && yDir == 0)
             {
                 if (IsFacingLeft)
-                    rollTo = new Vector3(transform.position.x + (-1 * rollDist), transform.position.y + (yDir * rollDist), 0);
+                    rollTo = new Vector3(transform.position.x + (-1 * rollDist), transform.position.y, 0);
                 else
-                    rollTo = new Vector3(transform.position.x + (1 * rollDist), transform.position.y + (yDir * rollDist), 0);                
+                    rollTo = new Vector3(transform.position.x + (1 * rollDist), transform.position.y, 0);                
             }
             else
                 rollTo = new Vector3(transform.position.x + (xDir * rollDist), transform.position.y + (yDir * rollDist), 0);        // This is where the position is generated
@@ -49,16 +50,19 @@ public class PlayerScript : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, rollTo);
 
-        while (distance > 0.2f)
-        {            
-            transform.position = Vector2.MoveTowards(transform.position, rollTo, 1.02f * Time.deltaTime);
+        if (distance > 0.2f)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, rollTo, 7f * Time.deltaTime);
             distance = Vector2.Distance(transform.position, rollTo);
         }
-
-        // Roll complete!
-        IsRollInitiated = false;
-        IsRolling = false;
-        playerAnimator.SetBool("IsRolling", false);
+        else
+        {
+            // Roll complete!
+            IsRollInitiated = false;
+            IsRolling = false;
+            playerAnimator.SetBool("IsRolling", false);
+            rollCharges--;
+        }
     }
 
     void GetInput()
@@ -69,14 +73,23 @@ public class PlayerScript : MonoBehaviour
         float inputY = Input.GetAxis("Vertical");
         bool rollInput = Input.GetKey(KeyCode.Space);
 
-        // Check if rolling
-        if (rollInput || IsRolling)
+        if (IsRollInitiated)
         {
-            // This is also the case for calling the Roll() function
-            IsRolling = true;
-            playerAnimator.SetBool("IsRolling", true);
             Roll(inputX, inputY);
-            return;
+            return;     // take no mre input while rolling
+        }
+
+        // Check if rolling
+        if (rollInput && !IsRollInitiated)
+        {
+            if (rollCharges > 0)
+            {
+                // This is also the case for calling the Roll() function
+                IsRolling = true;
+                playerAnimator.SetBool("IsRolling", true);
+                Roll(inputX, inputY);
+                return;
+            }
         }
 
         // Check if facing left
@@ -85,7 +98,7 @@ public class PlayerScript : MonoBehaviour
             playerAnimator.SetBool("IsFacingLeft", true);
             IsFacingLeft = true;
         }
-        else
+        else if (inputX > 0)        // this is necessary because it prevents IsFacingLeft from becoming false when the player simple stops moving altogether from a negative x input
         {
             playerAnimator.SetBool("IsFacingLeft", false);
             IsFacingLeft = false;
