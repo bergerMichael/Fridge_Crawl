@@ -15,7 +15,7 @@ public class GuardBehavior : MonoBehaviour
     public Transform PlayerPos;
     private int nextSpot;
 
-    public Animator detectedAnimator;
+    public Animator detectedAnimator;    
 
     // Start is called before the first frame update
     void Start()
@@ -75,6 +75,10 @@ public class GuardBehavior : MonoBehaviour
 
     void Move()
     {
+        if (transform.position.x < moveSpots[nextSpot].position.x)
+            transform.GetComponent<Animator>().SetBool("IsFacingLeft", false);
+        else
+            transform.GetComponent<Animator>().SetBool("IsFacingLeft", true);
         transform.position = Vector2.MoveTowards(transform.position, moveSpots[nextSpot].position, speed * Time.deltaTime);
 
         float distance = Vector2.Distance(transform.position, moveSpots[nextSpot].position);
@@ -93,10 +97,20 @@ public class GuardBehavior : MonoBehaviour
     void RaycastToPlayer()
     {
         Debug.DrawLine(transform.position, PlayerPos.position, Color.green);
+        RaycastHit2D raycastHitObject = Physics2D.Raycast(transform.position, PlayerPos.position);
+        if (raycastHitObject.collider.tag == "Wall")
+        {
+            lastKnownPos.position = raycastHitObject.transform.position;
+        }
+
     }
 
     void Chase()
     {
+        if (transform.position.x < lastKnownPos.position.x)
+            transform.GetComponent<Animator>().SetBool("IsFacingLeft", false);
+        else
+            transform.GetComponent<Animator>().SetBool("IsFacingLeft", true);
         // Move toward the last known position
         transform.position = Vector2.MoveTowards(transform.position, lastKnownPos.position, speed * Time.deltaTime);
         float distance = Vector2.Distance(transform.position, lastKnownPos.position);

@@ -14,7 +14,7 @@ public class FOVCollision : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        transform.position = transform.parent.position;
     }
 
     private void OnTriggerEnter2D(Collider2D col)

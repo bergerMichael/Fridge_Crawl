@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -10,7 +11,13 @@ public class PlayerScript : MonoBehaviour
     public int rollCharges;
     public int invSize;
 
+    public int currentLoad;
+
     public Animator playerAnimator;
+
+    public delegate void EventHandler(GameObject e);
+    public event EventHandler OnFoodPickup;
+
     private bool IsMoving;
     private bool IsFacingLeft;
     private bool IsRolling;
@@ -20,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     {
         IsRolling = false;      // This needs to be false initially because it will only be assigned false outside of update
         IsRollInitiated = false;
+        currentLoad = 0;
     }
 
     // Update is called once per frame
@@ -36,6 +44,7 @@ public class PlayerScript : MonoBehaviour
 
         if (!IsRollInitiated)   // Take snapshot of input here. This way it will only be done once per roll
         {
+            rollCharges--;  // This allows for immediate feedback to the player that a charge has been expended
             IsRollInitiated = true;
             if (xDir == 0 && yDir == 0)
             {
@@ -60,8 +69,7 @@ public class PlayerScript : MonoBehaviour
             // Roll complete!
             IsRollInitiated = false;
             IsRolling = false;
-            playerAnimator.SetBool("IsRolling", false);
-            rollCharges--;
+            playerAnimator.SetBool("IsRolling", false);            
         }
     }
 
@@ -119,6 +127,14 @@ public class PlayerScript : MonoBehaviour
         {
             IsMoving = false;
             playerAnimator.SetBool("IsMoving", false);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Food")
+        {
+            OnFoodPickup(collision.gameObject);
         }
     }
 }

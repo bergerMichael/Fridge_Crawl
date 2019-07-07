@@ -23,9 +23,9 @@ public class FoodBehavior : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
-        { }
-        else if (collision.tag == "Guard")
-        { }
+        if (collision.tag == "Player" || collision.tag == "Guard")
+        {
+            
+        }
     }
 }

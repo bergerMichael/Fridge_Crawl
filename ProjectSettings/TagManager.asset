@@ -6,6 +6,10 @@ TagManager:
   tags:
   - DetectionAnimController
   - Guard
+  - Roll
+  - Inventory
+  - Food
+  - Wall
   layers:
   - Default
   - TransparentFX

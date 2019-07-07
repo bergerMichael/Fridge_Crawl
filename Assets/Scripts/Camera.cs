@@ -25,6 +25,7 @@ public class Camera : MonoBehaviour
         invNum = pScript.invSize;
         rollChargeNum = pScript.rollCharges;
         DrawUI();
+        pScript.OnFoodPickup += AddFood;
     }
 
     // Update is called once per frame
@@ -134,6 +135,12 @@ public class Camera : MonoBehaviour
             newRollSlot.transform.position = pos;
             newRollSlot.AddComponent(typeof(SpriteRenderer));
             newRollSlot.GetComponent<SpriteRenderer>().sprite = rollSlotSprite;
+            newRollSlot.GetComponent<SpriteRenderer>().sortingLayerName = "UI_Layer";
         }
+    }
+
+    void AddFood(GameObject food)
+    {
+        string stop = "here";
     }
 }
