@@ -125,7 +125,10 @@ MonoBehaviour:
   speed: {x: 4, y: 4}
   rollDist: 0
   rollCharges: 0
+  invSize: 0
+  currentLoad: 0
   playerAnimator: {fileID: 1035026551953844977}
+  PlayerUI: {fileID: 0}
 --- !u!50 &1035026551953844976
 Rigidbody2D:
   serializedVersion: 4

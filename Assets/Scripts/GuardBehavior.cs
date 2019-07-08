@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.Animations;
+using Pathfinding;
 
 public class GuardBehavior : MonoBehaviour
 {
@@ -13,9 +14,15 @@ public class GuardBehavior : MonoBehaviour
     public Transform[] moveSpots;
     public Transform lastKnownPos;
     public Transform PlayerPos;
+    public Transform Target;
+    public Pathfinding.AIPath AStarScript;
+    public Pathfinding.Seeker mySeeker;
     private int nextSpot;
+    private bool foodDetected;
+    private Vector2 foodPos;
 
-    public Animator detectedAnimator;    
+    public Animator detectedAnimator;
+    public AIDestinationSetter myDestSetter;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +31,9 @@ public class GuardBehavior : MonoBehaviour
         nextSpot = 0;   // assuming object starts at position index 0
         isChaseActive = false;
         //detectedAnimator = GetComponentInChildren<Animator>();   // This ensures that the get call only happens once. Otherwise, it would be called every time the animation controller is updated
+        foodDetected = false;
+        //Target = moveSpots[0];
+        mySeeker.StartPath(transform.position, Target.position);
     }
 
     // Update is called once per frame
@@ -31,7 +41,10 @@ public class GuardBehavior : MonoBehaviour
     {
         if (!isChaseActive)  // if the guard is not chasing the player, movement continues as normal
         {
-            Move();
+            if (foodDetected)
+                MoveToFood();
+            else
+                Move();
         }
         else
         {
@@ -74,12 +87,14 @@ public class GuardBehavior : MonoBehaviour
     }
 
     void Move()
-    {
+    {        
         if (transform.position.x < moveSpots[nextSpot].position.x)
             transform.GetComponent<Animator>().SetBool("IsFacingLeft", false);
         else
             transform.GetComponent<Animator>().SetBool("IsFacingLeft", true);
-        transform.position = Vector2.MoveTowards(transform.position, moveSpots[nextSpot].position, speed * Time.deltaTime);
+        //transform.position = Vector2.MoveTowards(transform.position, moveSpots[nextSpot].position, speed * Time.deltaTime);
+        Target.position = moveSpots[nextSpot].position;
+        myDestSetter.target = Target;
 
         float distance = Vector2.Distance(transform.position, moveSpots[nextSpot].position);
 
@@ -90,8 +105,19 @@ public class GuardBehavior : MonoBehaviour
                 nextSpot++;
             }
             else
-                nextSpot = 0;
+                nextSpot = 0;            
         }
+    }
+
+    void MoveToFood()
+    {
+        if (transform.position.x < moveSpots[nextSpot].position.x)
+            transform.GetComponent<Animator>().SetBool("IsFacingLeft", false);
+        else
+            transform.GetComponent<Animator>().SetBool("IsFacingLeft", true);
+        // transform.position = Vector2.MoveTowards(transform.position, foodPos, speed * Time.deltaTime);
+        Target.position = foodPos;        
+        myDestSetter.target = Target;
     }
 
     void RaycastToPlayer()
@@ -112,11 +138,14 @@ public class GuardBehavior : MonoBehaviour
         else
             transform.GetComponent<Animator>().SetBool("IsFacingLeft", true);
         // Move toward the last known position
-        transform.position = Vector2.MoveTowards(transform.position, lastKnownPos.position, speed * Time.deltaTime);
+        //transform.position = Vector2.MoveTowards(transform.position, lastKnownPos.position, speed * Time.deltaTime);
+        Target.position = lastKnownPos.position;
+        myDestSetter.target = Target;
+
         float distance = Vector2.Distance(transform.position, lastKnownPos.position);
         if (distance < 0.2f)
         {
-            // This is the case where the guard reaches the last known position
+            
         }
 
         // use a raycast to update last known position
@@ -133,5 +162,24 @@ public class GuardBehavior : MonoBehaviour
     private void UpdateDetectionAnimControllerParameter() // This function modifies parameters in the attached detected animation controller - "DetectionAnimController"
     {
         detectedAnimator.SetBool("IsDetected", isChaseActive);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.tag == "Food")
+        {
+            foodDetected = true;
+            foodPos = collision.transform.position;
+        }
+        else
+            foodDetected = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Food")
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }

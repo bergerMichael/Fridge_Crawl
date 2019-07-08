@@ -10,24 +10,24 @@ public class PlayerScript : MonoBehaviour
     private Vector3 rollTo;
     public int rollCharges;
     public int invSize;
-
     public int currentLoad;
 
     public Animator playerAnimator;
 
-    public delegate void EventHandler(GameObject e);
-    public event EventHandler OnFoodPickup;
+    public PlayerCamera PlayerUI;
 
     private bool IsMoving;
     private bool IsFacingLeft;
     private bool IsRolling;
     private bool IsRollInitiated;   // prevents infinite roll    
+    private bool IsStunned;
 
     private void Start()
     {
         IsRolling = false;      // This needs to be false initially because it will only be assigned false outside of update
         IsRollInitiated = false;
         currentLoad = 0;
+        IsStunned = false;        
     }
 
     // Update is called once per frame
@@ -79,7 +79,7 @@ public class PlayerScript : MonoBehaviour
 
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
-        bool rollInput = Input.GetKey(KeyCode.Space);
+        bool rollInput = Input.GetKeyUp(KeyCode.Space);
 
         if (IsRollInitiated)
         {
@@ -88,7 +88,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         // Check if rolling
-        if (rollInput && !IsRollInitiated)
+        if (rollInput)
         {
             if (rollCharges > 0)
             {
@@ -98,6 +98,12 @@ public class PlayerScript : MonoBehaviour
                 Roll(inputX, inputY);
                 return;
             }
+        }
+
+        // Check if eating food
+        if (Input.GetKeyUp(KeyCode.Q))
+        {
+            EatFood();
         }
 
         // Check if facing left
@@ -132,9 +138,52 @@ public class PlayerScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.tag == "Food")
+        if (collision.transform.tag == "Food" && !IsStunned)      // if the player collides with a food object
         {
-            OnFoodPickup(collision.gameObject);
+            // Check if there's room in the player inventory
+            if (currentLoad < invSize)
+            {
+                PlayerCamera pcScript = PlayerUI.GetComponent<PlayerCamera>();
+                pcScript.AddFood(collision.gameObject);
+                currentLoad++;
+            }
         }
+
+        else if (collision.transform.tag == "Guard")    // if the player collides with a guard
+        {
+            IsStunned = true;
+            // Launch food in a directions
+            PlayerCamera pcScript = PlayerUI.GetComponent<PlayerCamera>();
+            for (int i = currentLoad; i > 0; i--)
+            {
+                // generate a random vector and speed to launch the food 
+                Vector2 randDir = new Vector2();
+                randDir.x = Random.Range(-2.0f, 2f);
+                randDir.y = Random.Range(-2.0f, 2f);
+                float rSpeed = Random.Range(8f, 16f);
+
+                LaunchFood(pcScript.RemoveFood(), randDir, rSpeed);
+                currentLoad--;
+            }
+            // Stun the player momentarily                        
+        }
+    }
+
+    private void EatFood()
+    {
+        if (currentLoad != 0)
+        {
+            PlayerCamera pcScript = PlayerUI.GetComponent<PlayerCamera>();
+            Destroy(pcScript.RemoveFood());
+            currentLoad--;
+            rollCharges++;
+        }
+    }
+
+    private void LaunchFood(GameObject food, Vector2 direction, float sp)
+    {
+        food.transform.position = transform.position;       // food must originate from the player
+        FoodBehavior fScript = food.GetComponent<FoodBehavior>();
+        fScript.TakeMovementParams(direction, sp);
     }
 }
