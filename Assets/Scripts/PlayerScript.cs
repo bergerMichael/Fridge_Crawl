@@ -151,7 +151,7 @@ public class PlayerScript : MonoBehaviour
 
         else if (collision.transform.tag == "Guard")    // if the player collides with a guard
         {
-            IsStunned = true;
+            //IsStunned = true;
             // Launch food in a directions
             PlayerCamera pcScript = PlayerUI.GetComponent<PlayerCamera>();
             for (int i = currentLoad; i > 0; i--)

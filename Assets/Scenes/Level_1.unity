@@ -3336,6 +3336,50 @@ TilemapCollider2D:
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0.00001
+--- !u!1 &377405819
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 377405821}
+  - component: {fileID: 377405820}
+  m_Layer: 0
+  m_Name: Reticle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &377405820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377405819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a40b820f93fc8624dad9f17b9c8d65ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cursorTexture: {fileID: 2800000, guid: c7c3cf1ddb2577b428fc830c01584516, type: 3}
+--- !u!4 &377405821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377405819}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -21.4, y: -10.18, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 23
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &403988701 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 416237447110366800, guid: aeafb4d9c47bdc64bae31846583c248b,
@@ -6859,6 +6903,10 @@ PrefabInstance:
       propertyPath: lastKnownPos
       value: 
       objectReference: {fileID: 822015739}
+    - target: {fileID: 772503358, guid: a1e0986044238bd4bbebfeebf5bffefc, type: 3}
+      propertyPath: maxSpeed
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1e0986044238bd4bbebfeebf5bffefc, type: 3}
 --- !u!1 &781595725 stripped
@@ -7436,12 +7484,12 @@ PrefabInstance:
     - target: {fileID: 7897248301490159414, guid: c2f9f6bc60d9eba419bafea26f2c09f9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.07517
+      value: -17.32
       objectReference: {fileID: 0}
     - target: {fileID: 7897248301490159414, guid: c2f9f6bc60d9eba419bafea26f2c09f9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.377785
+      value: -5.43
       objectReference: {fileID: 0}
     - target: {fileID: 7897248301490159414, guid: c2f9f6bc60d9eba419bafea26f2c09f9,
         type: 3}
@@ -7821,12 +7869,12 @@ PrefabInstance:
     - target: {fileID: 1035026551953844974, guid: 0ca6cb63ab485434288e2ec2c6689cf8,
         type: 3}
       propertyPath: speed.x
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1035026551953844974, guid: 0ca6cb63ab485434288e2ec2c6689cf8,
         type: 3}
       propertyPath: speed.y
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1035026551953844974, guid: 0ca6cb63ab485434288e2ec2c6689cf8,
         type: 3}
@@ -8041,6 +8089,10 @@ PrefabInstance:
       propertyPath: lastKnownPos
       value: 
       objectReference: {fileID: 1163628892}
+    - target: {fileID: 772503358, guid: a1e0986044238bd4bbebfeebf5bffefc, type: 3}
+      propertyPath: maxSpeed
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1e0986044238bd4bbebfeebf5bffefc, type: 3}
 --- !u!4 &1483548172 stripped
@@ -10180,6 +10232,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: d08074df4a4976c4c92522937d905958,
         type: 3}
+    - target: {fileID: 5861604058340884521, guid: 1ae385930da921345965160ffca81ac7,
+        type: 3}
+      propertyPath: cursor
+      value: 
+      objectReference: {fileID: 377405821}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ae385930da921345965160ffca81ac7, type: 3}
 --- !u!114 &5861604058127698530 stripped

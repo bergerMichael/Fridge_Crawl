@@ -8,6 +8,7 @@ public class PlayerCamera : MonoBehaviour
     private PlayerScript pScript;
 
     public Transform playerPos;
+    public Transform cursor;
     public float xMax;
     public float xMin;
     public float yMax;
@@ -18,6 +19,7 @@ public class PlayerCamera : MonoBehaviour
     private int invNum;
     private bool[] invSlots;
     private int rollChargeNum;
+    private int currentInvLoad;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,7 @@ public class PlayerCamera : MonoBehaviour
         }
         rollChargeNum = pScript.rollCharges;
         DrawUI();
+        currentInvLoad = 0;
     }
 
     // Update is called once per frame
@@ -42,6 +45,8 @@ public class PlayerCamera : MonoBehaviour
             rollChargeNum = pScript.rollCharges;
             UpdateUI();
         }
+        if (Input.GetMouseButtonUp(0))
+            MouseClick();
     }
 
     void MoveCamera()
@@ -178,6 +183,8 @@ public class PlayerCamera : MonoBehaviour
         food.GetComponent<SpriteRenderer>().sortingLayerName = "UI_Layer";
         Destroy(food.GetComponent<Rigidbody2D>());
         Destroy(food.GetComponent<BoxCollider2D>());
+
+        currentInvLoad++;
     }
 
     public GameObject RemoveFood()
@@ -218,11 +225,34 @@ public class PlayerCamera : MonoBehaviour
                 {
                     child.parent = null;    // detach from player camera UI
                     invSlots[lastFilledSlot] = false;
+                    currentInvLoad--;
                     return child.gameObject;
                 }                
             }
         }
 
         return null;
+    }
+
+    public void MouseClick()
+    {
+        if (currentInvLoad <= 0)
+            return;
+        GameObject foodItem = RemoveFood();
+        foodItem.transform.position = playerPos.position;
+        FoodBehavior fScript = foodItem.GetComponent<FoodBehavior>();
+        fScript.TakeMovementParams(Input.mousePosition, 10f);
+
+        /*
+        foodItem.AddComponent<BoxCollider2D>();
+        foodItem.AddComponent<Rigidbody2D>();
+        foodItem.GetComponent<Rigidbody2D>().gravityScale = 0;
+        foodItem.GetComponent<SpriteRenderer>().sortingLayerName = "Threshold_Layer";
+        FoodBehavior fScript = foodItem.GetComponent<FoodBehavior>();
+        fScript.destination = cursor.transform.position;
+        fScript.isMoving = true;
+        */
+
+        pScript.currentLoad--;
     }
 }

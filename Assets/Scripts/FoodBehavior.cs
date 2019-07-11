@@ -30,7 +30,7 @@ public class FoodBehavior : MonoBehaviour
     public void PropellFood()   // moves the food to a provided destination at the provided speed
     {
 
-        this.GetComponent<Rigidbody2D>().position = Vector2.MoveTowards(transform.position, destination, speed * Time.deltaTime);   // set rigidbody's position for physics
+        this.GetComponent<Rigidbody2D>().position = Vector2.MoveTowards(this.GetComponent<Rigidbody2D>().position, destination, speed * Time.deltaTime);   // set rigidbody's position for physics
 
         float distance = Vector2.Distance(transform.position, destination);
 
@@ -47,7 +47,7 @@ public class FoodBehavior : MonoBehaviour
         destination = des;
         speed = sp;
         isMoving = true;
-        this.GetComponent<SpriteRenderer>().sortingLayerName = "UI_Layer";
+        this.GetComponent<SpriteRenderer>().sortingLayerName = "Threshold_Layer";
         this.gameObject.AddComponent<Rigidbody2D>();
         this.GetComponent<Rigidbody2D>().gravityScale = 0;
         this.gameObject.AddComponent<Collider2D>();
