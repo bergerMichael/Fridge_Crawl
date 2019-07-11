@@ -12,13 +12,14 @@ public class GuardBehavior : MonoBehaviour
     public bool isChaseActive;
 
     public Transform[] moveSpots;
-    public Transform lastKnownPos;
+    public Vector2 lastKnownPos;
     public Transform PlayerPos;
     public Transform Target;
     public Pathfinding.AIPath AStarScript;
     public Pathfinding.Seeker mySeeker;
     private int nextSpot;
     private bool foodDetected;
+    private bool hasLineOfSight;
     private Vector2 foodPos;
 
     public Animator detectedAnimator;
@@ -32,8 +33,9 @@ public class GuardBehavior : MonoBehaviour
         isChaseActive = false;
         //detectedAnimator = GetComponentInChildren<Animator>();   // This ensures that the get call only happens once. Otherwise, it would be called every time the animation controller is updated
         foodDetected = false;
-        //Target = moveSpots[0];
+        Target = moveSpots[1];
         mySeeker.StartPath(transform.position, Target.position);
+        hasLineOfSight = false;
     }
 
     // Update is called once per frame
@@ -49,26 +51,28 @@ public class GuardBehavior : MonoBehaviour
         else
         {
             // otherwise the chase behaviour is used
-            Chase();
+            if (foodDetected)
+                MoveToFood();
+            else
+                Chase();
         }
 
         RotateFOV();    // This must be done on each update
-        RaycastToPlayer();
 
     }
 
     void RotateFOV()
     {
-        Transform direction;
+        Vector3 direction;
         if (isChaseActive)
         {
-            direction = PlayerPos;
+            direction = lastKnownPos;
         }
         else
         {
-            direction = moveSpots[nextSpot];            
+            direction = moveSpots[nextSpot].position;            
         }
-        float angle = Mathf.Sin((transform.position.y - direction.position.y) / (transform.position.x - direction.position.x)) * Mathf.Rad2Deg;
+        float angle = Mathf.Sin((transform.position.y - direction.y) / (transform.position.x - direction.x)) * Mathf.Rad2Deg;
         Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         Transform[] toRotate = this.GetComponentsInChildren<Transform>();
@@ -78,7 +82,7 @@ public class GuardBehavior : MonoBehaviour
             if (toRotate[i].name == "FOV")
             {
                 // toRotate[i].rotation = Quaternion.Slerp(toRotate[i].rotation, rotation, speed * Time.deltaTime);
-                var newRotation = Quaternion.LookRotation((toRotate[i].position - direction.position), Vector3.forward);
+                var newRotation = Quaternion.LookRotation((toRotate[i].position - direction), Vector3.forward);
                 newRotation.x = 0.0f;
                 newRotation.y = 0.0f;
                 toRotate[i].rotation = Quaternion.Slerp(toRotate[i].rotation, newRotation, Time.deltaTime * 8);
@@ -123,39 +127,52 @@ public class GuardBehavior : MonoBehaviour
     void RaycastToPlayer()
     {
         Debug.DrawLine(transform.position, PlayerPos.position, Color.green);
-        RaycastHit2D raycastHitObject = Physics2D.Raycast(transform.position, PlayerPos.position);
-        if (raycastHitObject.collider.tag == "Wall")
+        float distanceToPlayer = Vector2.Distance(transform.position, PlayerPos.position);
+        RaycastHit2D[] raycastHitObjects = Physics2D.RaycastAll(transform.position, PlayerPos.position, distanceToPlayer);
+        foreach (RaycastHit2D hit in raycastHitObjects)
         {
-            lastKnownPos.position = raycastHitObject.transform.position;
+            if (hit.collider.tag == "Wall")     // the case where the guard loses line of sight
+            {
+                hasLineOfSight = false;
+                return;
+            }                   // As long as this is the first case, the last known position will only update when there is no wall between the guard and the player         
         }
+        lastKnownPos = PlayerPos.position;     // If the guard can see the player, save the player's position as the last known
+        hasLineOfSight = true;
+        return;
 
     }
 
     void Chase()
     {
-        if (transform.position.x < lastKnownPos.position.x)
+        if (hasLineOfSight)
+            RaycastToPlayer();      // use a raycast to update last known position
+        if (transform.position.x < lastKnownPos.x)
             transform.GetComponent<Animator>().SetBool("IsFacingLeft", false);
         else
             transform.GetComponent<Animator>().SetBool("IsFacingLeft", true);
-        // Move toward the last known position
-        //transform.position = Vector2.MoveTowards(transform.position, lastKnownPos.position, speed * Time.deltaTime);
-        Target.position = lastKnownPos.position;
-        myDestSetter.target = Target;
 
-        float distance = Vector2.Distance(transform.position, lastKnownPos.position);
-        if (distance < 0.2f)
+        float distance = Vector2.Distance(transform.position, lastKnownPos);
+        if (distance < 0.2f)    // if the guard reaches the last known position and raycastToPlayer returns false, the player has lost the guard
         {
-            
+            if (!hasLineOfSight)
+            {
+                isChaseActive = false;
+                detectedAnimator.SetBool("IsDetected", isChaseActive);
+            }                
         }
-
-        // use a raycast to update last known position
-        RaycastToPlayer();
+        // Move toward the last known position        
+        Target.position = lastKnownPos;
+        myDestSetter.target = Target;
     }
 
     public void OnDetection(Transform detectedPos)
     {
+        if (isChaseActive)
+            return;         // don't need to do anything if the player is already being chased
         isChaseActive = true;
-        lastKnownPos = detectedPos;
+        lastKnownPos = detectedPos.position;
+        hasLineOfSight = true;
         UpdateDetectionAnimControllerParameter();
     }
 

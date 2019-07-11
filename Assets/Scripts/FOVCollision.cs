@@ -22,7 +22,7 @@ public class FOVCollision : MonoBehaviour
         if (col.gameObject.tag == "Player")
         {
             // Make the guard chase the player
-            Transform playerPos = col.gameObject.transform;          
+            Transform playerPos = col.gameObject.transform;  
             ParentGuardScript.OnDetection(playerPos);
         }
     }
