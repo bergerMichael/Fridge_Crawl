@@ -14,7 +14,7 @@ public class GuardBehavior : MonoBehaviour
     public Transform[] moveSpots;
     public Vector2 lastKnownPos;
     public Transform PlayerPos;
-    public Transform Target;
+    private Transform Target;
     public Pathfinding.AIPath AStarScript;
     public Pathfinding.Seeker mySeeker;
     private int nextSpot;
@@ -128,7 +128,7 @@ public class GuardBehavior : MonoBehaviour
     {
         Debug.DrawLine(transform.position, PlayerPos.position, Color.green);
         float distanceToPlayer = Vector2.Distance(transform.position, PlayerPos.position);
-        RaycastHit2D[] raycastHitObjects = Physics2D.RaycastAll(transform.position, PlayerPos.position, distanceToPlayer);
+        RaycastHit2D[] raycastHitObjects = Physics2D.RaycastAll(transform.position, PlayerPos.position, distanceToPlayer);      // Try calculating the player direction instead of destination normalize
         foreach (RaycastHit2D hit in raycastHitObjects)
         {
             if (hit.collider.tag == "Wall")     // the case where the guard loses line of sight

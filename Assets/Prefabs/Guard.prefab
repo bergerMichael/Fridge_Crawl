@@ -239,9 +239,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  lastKnownPos: {fileID: 0}
+  lastKnownPos: {x: 0, y: 0}
   PlayerPos: {fileID: 0}
-  Target: {fileID: 0}
   AStarScript: {fileID: 772503358}
   mySeeker: {fileID: 772503359}
   detectedAnimator: {fileID: 758845637}
@@ -448,8 +447,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1854655813
-  m_SortingLayer: 2
+  m_SortingLayerID: -1843241635
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 96e72529673b4914ba82ca1385e5e1d3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

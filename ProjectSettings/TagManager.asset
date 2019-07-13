@@ -59,6 +59,9 @@ TagManager:
   - name: Character_Layer
     uniqueID: 3359039683
     locked: 0
+  - name: Roof_Layer
+    uniqueID: 2617720995
+    locked: 0
   - name: Wall_Layer
     uniqueID: 916715371
     locked: 0
