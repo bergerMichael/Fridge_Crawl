@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8f06f7a1677a64285b66a3170dfa7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: {x: 4, y: 4}
+  speed: {x: 5, y: 5}
   rollDist: 0
   rollCharges: 0
   invSize: 0
