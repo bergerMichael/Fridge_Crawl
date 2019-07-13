@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - DetectionAnimController
+  - Guard
+  - Roll
+  - Inventory
+  - Food
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -14,9 +20,9 @@ TagManager:
   - 
   - 
   - Background
-  - 
-  - 
-  - 
+  - Floor
+  - Wall
+  - Roof
   - 
   - 
   - 
@@ -41,12 +47,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Floor_Layer
+    uniqueID: 115216467
+    locked: 0
   - name: FOV_Layer
     uniqueID: 2440311483
     locked: 0
-  - name: Tile_Layer
-    uniqueID: 115216467
+  - name: Threshold_Layer
+    uniqueID: 2451725661
     locked: 0
-  - name: Enemy_Layer
+  - name: Character_Layer
     uniqueID: 3359039683
+    locked: 0
+  - name: Roof_Layer
+    uniqueID: 2617720995
+    locked: 0
+  - name: Wall_Layer
+    uniqueID: 916715371
+    locked: 0
+  - name: UI_Layer
+    uniqueID: 3955827505
     locked: 0

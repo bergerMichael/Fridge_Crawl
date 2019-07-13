@@ -15,10 +15,4 @@ public class FridgeBehavior : MonoBehaviour
     {
         
     }
-
-    void CheckPlayCollision()
-    {
-        // if the player is colliding with the fridge while holding space, tie the fridge's movement with the player's
-        
-    }
 }
