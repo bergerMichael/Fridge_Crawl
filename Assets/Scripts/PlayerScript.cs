@@ -151,12 +151,15 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.transform.tag == "Food" && !IsStunned)      // if the player collides with a food object
         {
-            // Check if there's room in the player inventory
-            if (currentLoad < invSize)
+            if (collision.gameObject.GetComponent<FoodBehavior>().active)       // make sure the food didn't just spawn
             {
-                PlayerCamera pcScript = PlayerUI.GetComponent<PlayerCamera>();
-                pcScript.AddFood(collision.gameObject);
-                currentLoad++;
+                // Check if there's room in the player inventory
+                if (currentLoad < invSize)
+                {
+                    PlayerCamera pcScript = PlayerUI.GetComponent<PlayerCamera>();
+                    pcScript.AddFood(collision.gameObject);
+                    currentLoad++;
+                }
             }
         }
 
