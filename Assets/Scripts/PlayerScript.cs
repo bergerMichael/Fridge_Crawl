@@ -21,13 +21,15 @@ public class PlayerScript : MonoBehaviour
     private bool IsRolling;
     private bool IsRollInitiated;   // prevents infinite roll    
     private bool IsStunned;
+    private bool IsWallCollisionActive;
 
     private void Start()
     {
         IsRolling = false;      // This needs to be false initially because it will only be assigned false outside of update
         IsRollInitiated = false;
         currentLoad = 0;
-        IsStunned = false;        
+        IsStunned = false;
+        IsWallCollisionActive = false;
     }
 
     // Update is called once per frame
@@ -57,11 +59,20 @@ public class PlayerScript : MonoBehaviour
                 rollTo = new Vector3(transform.position.x + (xDir * rollDist), transform.position.y + (yDir * rollDist), 0);        // This is where the position is generated
         }
 
+        if (IsWallCollisionActive)  // If we hit a wall end the roll
+        {
+            rollTo = transform.position;
+        }
+
+        Debug.DrawLine(transform.position, rollTo, Color.yellow);   // used for testing purposes
+
+        // check if there is a collision that is preventing the player from reaching rollTo. If so, cancel the roll
+
         float distance = Vector2.Distance(transform.position, rollTo);
 
         if (distance > 0.2f)
         {
-            transform.position = Vector2.MoveTowards(transform.position, rollTo, 7f * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(GetComponent<Rigidbody2D>().position, rollTo, 7f * Time.deltaTime);
             distance = Vector2.Distance(transform.position, rollTo);
         }
         else
@@ -166,6 +177,19 @@ public class PlayerScript : MonoBehaviour
                 currentLoad--;
             }
             // Stun the player momentarily                        
+        }
+
+        if (collision.transform.tag == "Wall")  // if the player is colliding with a wall, we need to flag it to prevent a roll from getting caught
+        {
+            IsWallCollisionActive = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Wall")
+        {
+            IsWallCollisionActive = false;
         }
     }
 

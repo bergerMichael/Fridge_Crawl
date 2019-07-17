@@ -3552,7 +3552,7 @@ TilemapCollider2D:
   m_GameObject: {fileID: 368715120}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 722ba71ff2662fc4994ef01109b667f6, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -8603,6 +8603,11 @@ PrefabInstance:
       propertyPath: PlayerUI
       value: 
       objectReference: {fileID: 5861604058127698530}
+    - target: {fileID: 1035026551953844976, guid: 0ca6cb63ab485434288e2ec2c6689cf8,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ca6cb63ab485434288e2ec2c6689cf8, type: 3}
 --- !u!1001 &1279941914
