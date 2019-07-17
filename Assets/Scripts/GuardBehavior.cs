@@ -128,7 +128,10 @@ public class GuardBehavior : MonoBehaviour
     {
         Debug.DrawLine(transform.position, PlayerPos.position, Color.green);
         float distanceToPlayer = Vector2.Distance(transform.position, PlayerPos.position);
-        RaycastHit2D[] raycastHitObjects = Physics2D.RaycastAll(transform.position, PlayerPos.position, distanceToPlayer);      // Try calculating the player direction instead of destination normalize
+        Vector2 directionToPlayer = (PlayerPos.position - transform.position).normalized;
+
+        RaycastHit2D[] raycastHitObjects = Physics2D.RaycastAll(transform.position, directionToPlayer, distanceToPlayer);      // Try calculating the player direction instead of destination normalize
+
         foreach (RaycastHit2D hit in raycastHitObjects)
         {
             if (hit.collider.tag == "Wall")     // the case where the guard loses line of sight
