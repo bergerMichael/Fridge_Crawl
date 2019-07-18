@@ -19,7 +19,9 @@ public class OpenFridge : MonoBehaviour
 
     private GameObject InstantiateFoodPrefab()
     {
-        return Instantiate(foodPrefab, transform);
+        GameObject food = Instantiate(foodPrefab);
+        food.GetComponent<Transform>().position = transform.position;
+        return food;
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
