@@ -16,6 +16,8 @@ public class PlayerScript : MonoBehaviour
 
     public PlayerCamera PlayerUI;
 
+    public AudioSource[] EatingSounds;
+
     private bool IsMoving;
     private bool IsFacingLeft;
     private bool IsRolling;
@@ -28,7 +30,7 @@ public class PlayerScript : MonoBehaviour
         IsRolling = false;      // This needs to be false initially because it will only be assigned false outside of update
         IsRollInitiated = false;
         currentLoad = 0;
-        IsStunned = false;
+        EatingSounds = GetComponentsInChildren<AudioSource>();
         IsWallCollisionActive = false;
     }
 
@@ -204,6 +206,8 @@ public class PlayerScript : MonoBehaviour
             Destroy(pcScript.RemoveFood());
             currentLoad--;
             rollCharges++;
+            int selectedItem = Random.Range(0, EatingSounds.Length);
+            EatingSounds[selectedItem].Play();
         }
     }
 
