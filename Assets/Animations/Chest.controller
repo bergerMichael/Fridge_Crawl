@@ -36,7 +36,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: PlayerExitEnd
+    m_ConditionEvent: CloseChestEnd
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1186507495256870107}
@@ -89,14 +89,14 @@ AnimatorController:
   m_Name: Chest
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: PlayerExitStart
-    m_Type: 9
+  - m_Name: CloseChestStart
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: PlayerExitEnd
-    m_Type: 9
+  - m_Name: CloseChestEnd
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -176,7 +176,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: PlayerExitStart
+    m_ConditionEvent: CloseChestStart
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 534670651738682536}

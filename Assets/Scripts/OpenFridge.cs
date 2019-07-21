@@ -5,6 +5,8 @@ using UnityEngine;
 public class OpenFridge : MonoBehaviour
 {
     public GameObject foodPrefab;
+    public AudioSource fridge_open;
+    public AudioSource fridge_close;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +31,7 @@ public class OpenFridge : MonoBehaviour
         {
             GetComponent<Animator>().SetBool("Opened", true);
             spawnFood();
+            fridge_open.Play();
         }
     }
 
@@ -37,14 +40,15 @@ public class OpenFridge : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             GetComponent<Animator>().SetBool("Opened", false);
+            fridge_close.Play();
         }
     }
 
     private void spawnFood()
     {
         Vector2 randDes = new Vector2();
-        randDes.x = Random.Range(-2.0f, 2f);
-        randDes.y = Random.Range(-2.0f, 2f);
+        randDes.x = 2f;
+        randDes.y = 0f;
         float rSpeed = Random.Range(8f, 16f);
 
         InstantiateFoodPrefab().GetComponent<FoodBehavior>().TakeMovementParams(randDes, rSpeed);
