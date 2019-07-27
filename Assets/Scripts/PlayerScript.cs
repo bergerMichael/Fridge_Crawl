@@ -186,6 +186,11 @@ public class PlayerScript : MonoBehaviour
         {
             IsWallCollisionActive = true;
         }
+
+        if (collision.transform.tag == "Chest")
+        {
+            // transfer food to chest
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
