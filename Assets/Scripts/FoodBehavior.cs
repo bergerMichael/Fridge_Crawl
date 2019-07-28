@@ -8,6 +8,7 @@ public class FoodBehavior : MonoBehaviour
     public bool isMoving;
     public Vector2 destination;
     public float speed;
+    public bool active;
 
 
     public Sprite[] foods;
@@ -18,6 +19,7 @@ public class FoodBehavior : MonoBehaviour
         rand = Random.Range(0, foods.Length);        
         this.gameObject.GetComponent<SpriteRenderer>().sprite = foods[rand];
         isMoving = false;
+        active = true;
     }
 
     // Update is called once per frame
@@ -46,11 +48,9 @@ public class FoodBehavior : MonoBehaviour
         des.y += transform.position.y;
         destination = des;
         speed = sp;
-        isMoving = true;
-        this.GetComponent<SpriteRenderer>().sortingLayerName = "Threshold_Layer";
-        this.gameObject.AddComponent<Rigidbody2D>();
-        this.GetComponent<Rigidbody2D>().gravityScale = 0;
-        this.gameObject.AddComponent<Collider2D>();
+        isMoving = true;        
+        this.gameObject.AddComponent<Collider2D>();        
+        active = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)     // May only need this for the guard. If the food is collided with by the player, it is sent to the UI
@@ -58,6 +58,20 @@ public class FoodBehavior : MonoBehaviour
         if (collision.tag == "Player" || collision.tag == "Guard")
         {
             
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Player")
+        {
+            if (GetComponent<Rigidbody2D>() == null)
+            {
+                this.GetComponent<SpriteRenderer>().sortingLayerName = "Threshold_Layer";
+                this.gameObject.AddComponent<Rigidbody2D>();                
+                this.GetComponent<Rigidbody2D>().gravityScale = 0;
+                active = true;
+            }
         }
     }
 }

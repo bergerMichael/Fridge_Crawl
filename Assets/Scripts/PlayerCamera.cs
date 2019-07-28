@@ -45,8 +45,6 @@ public class PlayerCamera : MonoBehaviour
             rollChargeNum = pScript.rollCharges;
             UpdateUI();
         }
-        if (Input.GetMouseButtonUp(0))
-            MouseClick();
     }
 
     void MoveCamera()
@@ -232,27 +230,5 @@ public class PlayerCamera : MonoBehaviour
         }
 
         return null;
-    }
-
-    public void MouseClick()
-    {
-        if (currentInvLoad <= 0)
-            return;
-        GameObject foodItem = RemoveFood();
-        foodItem.transform.position = playerPos.position;
-        FoodBehavior fScript = foodItem.GetComponent<FoodBehavior>();
-        fScript.TakeMovementParams(Input.mousePosition, 10f);
-
-        /*
-        foodItem.AddComponent<BoxCollider2D>();
-        foodItem.AddComponent<Rigidbody2D>();
-        foodItem.GetComponent<Rigidbody2D>().gravityScale = 0;
-        foodItem.GetComponent<SpriteRenderer>().sortingLayerName = "Threshold_Layer";
-        FoodBehavior fScript = foodItem.GetComponent<FoodBehavior>();
-        fScript.destination = cursor.transform.position;
-        fScript.isMoving = true;
-        */
-
-        pScript.currentLoad--;
     }
 }
