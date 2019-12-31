@@ -180,7 +180,7 @@ public class PlayerCamera : MonoBehaviour
         food.transform.position = pos;
         food.GetComponent<SpriteRenderer>().sortingLayerName = "UI_Layer";
         Destroy(food.GetComponent<Rigidbody2D>());
-        Destroy(food.GetComponent<BoxCollider2D>());
+        //Destroy(food.GetComponent<BoxCollider2D>());
 
         currentInvLoad++;
     }

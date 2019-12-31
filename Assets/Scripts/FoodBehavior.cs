@@ -6,6 +6,7 @@ public class FoodBehavior : MonoBehaviour
 {
     private int rand;
     public bool isMoving;
+    public bool isMovingToChest;
     public Vector2 destination;
     public float speed;
     public bool active;
@@ -19,6 +20,7 @@ public class FoodBehavior : MonoBehaviour
         rand = Random.Range(0, foods.Length);        
         this.gameObject.GetComponent<SpriteRenderer>().sprite = foods[rand];
         isMoving = false;
+        isMovingToChest = false;
         active = true;
     }
 
@@ -27,6 +29,8 @@ public class FoodBehavior : MonoBehaviour
     {
         if (isMoving)
             PropellFood();
+        if (isMovingToChest)
+            transform.position = Vector3.MoveTowards(transform.position, destination, 8f); ;
     }
 
     public void PropellFood()   // moves the food to a provided destination at the provided speed
@@ -40,6 +44,13 @@ public class FoodBehavior : MonoBehaviour
         {
             isMoving = false;
         }
+    }
+
+    public void Deposit()
+    {
+        this.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Threshold_Layer";
+        transform.position = Vector3.MoveTowards(transform.position, destination, 8f);
+        isMovingToChest = true;
     }
 
     public void TakeMovementParams(Vector2 des, float sp)

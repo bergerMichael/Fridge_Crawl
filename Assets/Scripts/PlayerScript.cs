@@ -11,6 +11,9 @@ public class PlayerScript : MonoBehaviour
     public int rollCharges;
     public int invSize;
     public int currentLoad;
+    public List<FoodBehavior> Inventory;  // A list of references to each held food's script
+    public int Score;
+    public GameObject Chest;
 
     public Animator playerAnimator;
 
@@ -30,6 +33,7 @@ public class PlayerScript : MonoBehaviour
         currentLoad = 0;
         IsStunned = false;
         IsWallCollisionActive = false;
+        Score = 0;
     }
 
     // Update is called once per frame
@@ -157,8 +161,10 @@ public class PlayerScript : MonoBehaviour
                 if (currentLoad < invSize)
                 {
                     PlayerCamera pcScript = PlayerUI.GetComponent<PlayerCamera>();
+                    collision.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "UI_Layer";
                     pcScript.AddFood(collision.gameObject);
                     currentLoad++;
+                    Inventory.Add(collision.gameObject.GetComponent<FoodBehavior>());   // add the collected foods script to the player inventory so it can be referenced
                 }
             }
         }
@@ -176,7 +182,9 @@ public class PlayerScript : MonoBehaviour
                 randDir.y = Random.Range(-2.0f, 2f);
                 float rSpeed = Random.Range(8f, 16f);
 
-                LaunchFood(pcScript.RemoveFood(), randDir, rSpeed);
+                GameObject extractedFood = pcScript.RemoveFood();
+                Inventory.Remove(extractedFood.GetComponent<FoodBehavior>());
+                LaunchFood(extractedFood, randDir, rSpeed);
                 currentLoad--;
             }
             // Stun the player momentarily                        
@@ -190,6 +198,21 @@ public class PlayerScript : MonoBehaviour
         if (collision.transform.tag == "Chest")
         {
             // transfer food to chest
+            DepositFood();
+        }
+    }
+
+    private void DepositFood()
+    {
+        // for each food in player inv
+        // call food.Deposit()
+        // In order for this to work, player will need a reference to every food object in their inventory
+        foreach (FoodBehavior food in Inventory)
+        {
+            food.destination = Chest.transform.position;
+            food.Deposit();
+            Score++;
+            currentLoad--;
         }
     }
 
@@ -206,9 +229,11 @@ public class PlayerScript : MonoBehaviour
         if (currentLoad != 0)
         {
             PlayerCamera pcScript = PlayerUI.GetComponent<PlayerCamera>();
-            Destroy(pcScript.RemoveFood());
+            GameObject extractedFood = pcScript.RemoveFood();        // Need to extract the food object from the UI so that it can be referenced in the List.Remove() call    
             currentLoad--;
-            rollCharges++;
+            rollCharges++;            
+            Inventory.Remove(extractedFood.GetComponent<FoodBehavior>());
+            Destroy(extractedFood);
         }
     }
 

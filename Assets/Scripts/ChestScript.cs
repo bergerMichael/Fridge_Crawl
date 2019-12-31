@@ -24,6 +24,8 @@ public class ChestScript : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
             OperateChest();
+        if (collision.gameObject.tag == "Food")
+            Destroy(collision.gameObject);
     }
 
     void OperateChest()
