@@ -155,6 +155,8 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.transform.tag == "Food" && !IsStunned)      // if the player collides with a food object
         {
+            if (collision.gameObject.GetComponent<FoodBehavior>().isMovingToChest)
+                return;
             if (collision.gameObject.GetComponent<FoodBehavior>().active)       // make sure the food didn't just spawn
             {
                 // Check if there's room in the player inventory

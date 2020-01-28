@@ -199,6 +199,8 @@ public class GuardBehavior : MonoBehaviour
     {
         if (collision.transform.tag == "Food")
         {
+            if (collision.gameObject.GetComponent<FoodBehavior>().isMovingToChest)
+                return;
             Destroy(collision.gameObject);
         }
     }

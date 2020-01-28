@@ -30,7 +30,12 @@ public class FoodBehavior : MonoBehaviour
         if (isMoving)
             PropellFood();
         if (isMovingToChest)
-            transform.position = Vector3.MoveTowards(transform.position, destination, 8f); ;
+        {
+            transform.position = Vector3.MoveTowards(transform.position, destination, 8f);
+            // check if the food is close enough to the chest to add the rigidbody
+            if (Vector3.Distance(this.transform.position, destination) < 0.1f)
+                this.gameObject.AddComponent<Rigidbody2D>();
+        }            
     }
 
     public void PropellFood()   // moves the food to a provided destination at the provided speed
@@ -50,7 +55,7 @@ public class FoodBehavior : MonoBehaviour
     {
         this.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Threshold_Layer";
         transform.position = Vector3.MoveTowards(transform.position, destination, 8f);
-        isMovingToChest = true;
+        isMovingToChest = true;        
     }
 
     public void TakeMovementParams(Vector2 des, float sp)
@@ -74,6 +79,8 @@ public class FoodBehavior : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
+        if (isMovingToChest)
+            return;
         if (collision.collider.tag == "Player")
         {
             if (GetComponent<Rigidbody2D>() == null)
@@ -84,5 +91,17 @@ public class FoodBehavior : MonoBehaviour
                 active = true;
             }
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<FoodBehavior>().isMovingToChest)
+            return;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<FoodBehavior>().isMovingToChest)
+            return;
     }
 }
